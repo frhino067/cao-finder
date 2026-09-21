@@ -1,0 +1,234 @@
+[
+  {
+    "id": "US",
+    "name": "Technological University of the Shannon",
+    "short": "TUS",
+    "location": null,
+    "type": "Technological University",
+    "url": "https://tus.ie/courses/"
+  },
+  {
+    "id": "SE",
+    "name": "South East Technological University",
+    "short": "SETU",
+    "location": null,
+    "type": "Technological University",
+    "url": "https://www.setu.ie/courses"
+  },
+  {
+    "id": "MT",
+    "name": "Munster Technological University",
+    "short": "MTU",
+    "location": null,
+    "type": "Technological University",
+    "url": "https://www.mtu.ie/courses/"
+  },
+  {
+    "id": "CK",
+    "name": "University College Cork",
+    "short": "UCC",
+    "location": "Cork",
+    "type": "University",
+    "url": "https://www.ucc.ie/en/study/undergrad/"
+  },
+  {
+    "id": "AU",
+    "name": "Atlantic Technological University",
+    "short": "ATU",
+    "location": null,
+    "type": "Technological University",
+    "url": "https://www.atu.ie/study"
+  },
+  {
+    "id": "AC",
+    "name": "American College Dublin",
+    "short": "ACD",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://iamu.edu/"
+  },
+  {
+    "id": "CT",
+    "name": "CCT College Dublin",
+    "short": "CCT",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://www.cct.ie/"
+  },
+  {
+    "id": "CM",
+    "name": "Marino Institute of Education",
+    "short": "Marino",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://www.mie.ie/"
+  },
+  {
+    "id": "DB",
+    "name": "Dublin Business School",
+    "short": "DBS",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://www.dbs.ie/"
+  },
+  {
+    "id": "DC",
+    "name": "Dublin City University",
+    "short": "DCU",
+    "location": "Dublin",
+    "type": "University",
+    "url": "https://www.dcu.ie/courses/undergraduate"
+  },
+  {
+    "id": "DL",
+    "name": "Dun Laoghaire Institute of Art, Design & Technology",
+    "short": "IADT",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://iadt.ie/courses/"
+  },
+  {
+    "id": "GC",
+    "name": "Griffith College Dublin, Cork & Limerick",
+    "short": "Griffith",
+    "location": null,
+    "type": "Other third-level institution",
+    "url": "https://www.griffith.ie/"
+  },
+  {
+    "id": "BY",
+    "name": "IBAT College Dublin",
+    "short": "IBAT",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://www.ibat.ie/"
+  },
+  {
+    "id": "ID",
+    "name": "ICD Business School, Dublin",
+    "short": "ICD",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://icd.ie/"
+  },
+  {
+    "id": "AD",
+    "name": "National College of Art and Design",
+    "short": "NCAD",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://www.ncad.ie/"
+  },
+  {
+    "id": "NC",
+    "name": "National College of Ireland",
+    "short": "NCI",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://www.ncirl.ie/"
+  },
+  {
+    "id": "RC",
+    "name": "RCSI University of Medicine & Health Sciences",
+    "short": "RCSI",
+    "location": "Dublin",
+    "type": "University",
+    "url": "https://www.rcsi.com/dublin/undergraduate"
+  },
+  {
+    "id": "TU",
+    "name": "Technological University Dublin",
+    "short": "TU Dublin",
+    "location": "Dublin",
+    "type": "Technological University",
+    "url": "https://www.tudublin.ie/study/undergraduate/"
+  },
+  {
+    "id": "TR",
+    "name": "Trinity College Dublin",
+    "short": "TCD",
+    "location": "Dublin",
+    "type": "University",
+    "url": "https://www.tcd.ie/courses/undergraduate/"
+  },
+  {
+    "id": "DN",
+    "name": "University College Dublin",
+    "short": "UCD",
+    "location": "Dublin",
+    "type": "University",
+    "url": "https://www.ucd.ie/myucd/"
+  },
+  {
+    "id": "DK",
+    "name": "Dundalk Institute of Technology",
+    "short": "DkIT",
+    "location": "Dundalk",
+    "type": "Other third-level institution",
+    "url": "https://www.dkit.ie/courses/"
+  },
+  {
+    "id": "GY",
+    "name": "University of Galway",
+    "short": "Galway",
+    "location": "Galway",
+    "type": "University",
+    "url": "https://www.universityofgalway.ie/courses/undergraduate-courses/"
+  },
+  {
+    "id": "GB",
+    "name": "Galway Business School",
+    "short": "GBS",
+    "location": "Galway",
+    "type": "Other third-level institution",
+    "url": "https://galwaybusinessschool.ie/"
+  },
+  {
+    "id": "MI",
+    "name": "Mary Immaculate College of Education",
+    "short": "MIC",
+    "location": "Limerick",
+    "type": "Other third-level institution",
+    "url": "https://www.mic.ul.ie/"
+  },
+  {
+    "id": "LM",
+    "name": "University of Limerick",
+    "short": "UL",
+    "location": "Limerick",
+    "type": "University",
+    "url": "https://www.ul.ie/courses"
+  },
+  {
+    "id": "MU",
+    "name": "Pontifical University, St Patrick`s College",
+    "short": "St Patrick’s",
+    "location": "Maynooth",
+    "type": "Other third-level institution",
+    "url": "https://sppu.ie/"
+  },
+  {
+    "id": "MH",
+    "name": "Maynooth University",
+    "short": "Maynooth",
+    "location": "Maynooth",
+    "type": "University",
+    "url": "https://www.maynoothuniversity.ie/study-maynooth/undergraduate-studies/courses"
+  },
+  {
+    "id": "SC",
+    "name": "Setanta College",
+    "short": "Setanta",
+    "location": "Thurles",
+    "type": "Other third-level institution",
+    "url": "https://www.setantacollege.com/"
+  },
+  {
+    "id": "DS",
+    "name": "Dorset College",
+    "short": "Dorset",
+    "location": "Dublin",
+    "type": "Other third-level institution",
+    "url": "https://dorset.ie/"
+  }
+]
