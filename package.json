@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node tests/search.test.mjs"
+    "test": "node tests/search.test.mjs && node tests/data-build.test.mjs"
   },
   "dependencies": {
     "react": "19.2.6",

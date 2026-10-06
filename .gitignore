@@ -1,2 +1,4 @@
 node_modules/
 .search-test-build.mjs
+
+.prerender.mjs

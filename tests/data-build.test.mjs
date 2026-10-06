@@ -1,0 +1,10 @@
+import {build} from 'esbuild';
+import {readFile} from 'node:fs/promises';
+import assert from 'node:assert/strict';
+import {courseDataPlugin} from '../build-course-data.mjs';
+const original=JSON.parse(await readFile(new URL('../src/data/courses.json',import.meta.url),'utf8'));
+const result=await build({stdin:{contents:"export {default} from './src/data/courses.json';",resolveDir:process.cwd()},bundle:true,format:'esm',platform:'node',write:false,plugins:[courseDataPlugin()]});
+const {default:published}=await import('data:text/javascript;base64,'+Buffer.from(result.outputFiles[0].text).toString('base64'));
+assert.deepEqual(published,original,'Published course facts must exactly match the editable source');
+assert(published.every((course,i)=>course!==published[(i+1)%published.length]),'Each course must remain a separate object');
+console.log(`Published data preserves all ${published.length} courses and every field.`);
