@@ -10,6 +10,7 @@ import {
   studySummary, studyTime, weekLabel, type StudyEntry,
 } from './lib/study';
 import type {useShortlist} from './lib/use-shortlist';
+import StudyInsights from './study-insights';
 
 type AccountState = ReturnType<typeof useShortlist>;
 type Draft = {date: string; minutes: string; subject: string; difficulty: number; topic: string};
@@ -54,7 +55,7 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
   const [draft, setDraft] = useState<Draft>(() => blankDraft(today));
   const [editing, setEditing] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<StudyEntry | null>(null);
-  const [data, setData] = useState<{week: string; entries: StudyEntry[]} | null>(null);
+  const [data, setData] = useState<StudyEntry[] | null>(null);
   const [refresh, setRefresh] = useState(0);
   const [loadError, setLoadError] = useState('');
   const [formError, setFormError] = useState('');
@@ -64,21 +65,21 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
   const saving = useRef(false);
   const draftId = useRef<string | null>(null);
   const subjectInput = useRef<HTMLInputElement>(null);
-  const end = addDays(week, 6);
-  const entries = data?.week === week ? data.entries : [];
+  const entries = useMemo(() => (data ?? []).filter(entry => entry.studied_on >= week
+    && entry.studied_on <= addDays(week, 6)), [data, week]);
   const summary = useMemo(() => studySummary(entries, week), [entries, week]);
 
   useEffect(() => {
     const controller = new AbortController();
     setLoadError('');
-    async function loadWeek() {
+    async function loadHistory() {
       try {
         const all: StudyEntry[] = [];
         let cursor: string | undefined;
         const batchSize = 500;
         while (!controller.signal.aborted) {
           let query = client.from(table).select(entryFields)
-            .eq('user_id', userId).gte('studied_on', week).lte('studied_on', end)
+            .eq('user_id', userId)
             .order('id').limit(batchSize).abortSignal(controller.signal);
           if (cursor) query = query.gt('id', cursor);
           const {data, error} = await query;
@@ -89,19 +90,18 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
         }
         if (controller.signal.aborted) return;
         all.sort((a, b) => b.studied_on.localeCompare(a.studied_on) || a.subject.localeCompare(b.subject, 'en-IE'));
-        setData({week, entries: all});
+        setData(all);
       } catch {
-        if (!controller.signal.aborted) setLoadError('Could not load study sessions for this week.');
+        if (!controller.signal.aborted) setLoadError('Could not load study sessions. Reload to see your latest totals and insights.');
       }
     }
-    void loadWeek();
+    void loadHistory();
     return () => controller.abort();
-  }, [client, userId, week, end, refresh]);
+  }, [client, userId, refresh]);
 
   function selectWeek(next: string) {
     setWeek(next);
     setSubjectFilter('');
-    setLoadError('');
   }
 
   function resetForm(date: string) {
@@ -189,13 +189,13 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
     }
   }
 
-  const loading = data?.week !== week && !loadError;
+  const loading = data === null && !loadError;
   const activeFilter = summary.bySubject.some(subject => subject.key === subjectFilter) ? subjectFilter : '';
   const visibleEntries = activeFilter
     ? entries.filter(entry => entry.subject.toLocaleLowerCase('en-IE') === activeFilter)
     : entries;
   const maxMinutes = Math.max(1, ...summary.days.map(day => day.minutes));
-  const noData = loading || (loadError && data?.week !== week);
+  const noData = loading || (loadError && data === null);
   const metrics = [
     {label: 'Study time', value: studyTime(summary.total), note: 'Across all subjects', icon: Clock3},
     {label: 'Sessions', value: entries.length, note: 'Logged this week', icon: BookOpen},
@@ -316,6 +316,8 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
         </section>
       </div>
     </div>
+
+    <StudyInsights entries={data ?? []} loading={loading} unavailable={!!loadError}/>
 
     <div className="study-bottom">
       <section className="study-panel study-history">

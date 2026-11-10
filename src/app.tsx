@@ -1,6 +1,7 @@
 import React,{useState,useEffect} from 'react';
 import Finder from './finder';
 import {useShortlist} from './lib/use-shortlist';
+import {routeView} from './lib/routes';
 function currentRoute(){return location.hash.startsWith('#/')?location.hash:'#/';}
 export default function App(){
  // Match the pre-rendered homepage, then apply deep links after hydration.
@@ -11,7 +12,6 @@ export default function App(){
   changed();window.addEventListener('hashchange',changed);
   return()=>window.removeEventListener('hashchange',changed);
  },[]);
- const page=route.slice(2).split('?')[0];
- const view=['colleges','categories','calculator','saved','account','study'].includes(page)?page:'courses';
+ const view=routeView(route);
  return <Finder key={route} view={view} shortlist={shortlist}/>;
 }
