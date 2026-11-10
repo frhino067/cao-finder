@@ -2,7 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import type {SupabaseClient, User} from '@supabase/supabase-js';
 import {courses} from './course-data';
 
-export const accountsEnabled = false; // Enable after a public test address receives a code.
+export const accountsEnabled = true;
 const courseCodes = new Set(courses.map(course => course.code));
 const storageKey = 'cao-finder-offline-saved-v1';
 const table = 'cao_saved_courses';
