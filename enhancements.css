@@ -3,3 +3,19 @@
 
 /* Plain-language search: retain the existing visual theme. */
 .search-help{font-size:13px!important;line-height:1.65!important;margin:12px 0 0!important;color:#67617c!important}.search-summary{border:1px solid #e2dcf7;background:#f7f5ff;border-radius:13px;padding:15px 17px;margin:0 0 20px;color:#514773;font-size:13px;line-height:1.6}.search-summary>div{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.search-summary strong{font-weight:650;margin-right:3px}.search-detail{background:#ebe6fa;color:#55478a;border-radius:6px;padding:3px 8px;font-size:12px}.search-summary p{margin:7px 0 0;color:#716883;font-size:12px}.try-search{flex-wrap:wrap}.try-search button{white-space:normal;text-align:left}.hero-search input{min-width:0}@media(max-width:600px){.search-help{font-size:12px!important}.search-summary{padding:13px}.try-search{gap:7px}.try-search button{font-size:12px}}
+
+.account-area { max-width: 680px; margin: 32px auto 72px; }
+.account-panel h2, .account-panel h3 { margin: 0 0 8px; }
+.account-panel p { margin: 0 0 16px; overflow-wrap: anywhere; }
+.account-form { display: grid; gap: 9px; margin: 20px 0 12px; }
+.account-form label { font-weight: 650; }
+.account-form input {
+  width: 100%; min-height: 44px; padding: 10px 12px; font: inherit;
+  color: inherit; background: white; border: 1px solid #d9d5e8; border-radius: 10px;
+}
+.account-form .primary-button { justify-self: start; margin-top: 4px; }
+.account-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.account-section { margin-top: 24px; padding-top: 20px; border-top: 1px solid #eeedf4; }
+.account-privacy { display: inline-block; margin: 12px 0; }
+.account-panel .account-delete { color: #9c2537; }
+.shortlist-account a { display: inline-flex; align-items: center; gap: 6px; font-weight: 650; }

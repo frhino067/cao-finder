@@ -9,6 +9,7 @@ const root=path.dirname(fileURLToPath(import.meta.url));
 const alias={'@/components':root+'/src/components','@/lib/utils':root+'/src/lib/utils'};
 const shared={absWorkingDir:root,bundle:true,jsx:'automatic',alias,define:{'process.env.NODE_ENV':'"production"'}};
 await build({...shared,entryPoints:['src/entry.tsx'],outfile:'app.js',format:'iife',platform:'browser',target:['chrome100','edge100'],minify:true,plugins:[courseDataPlugin()],legalComments:'inline'});
+await build({...shared,entryPoints:['src/lib/account-client.ts'],outfile:'account-client.js',format:'esm',platform:'browser',target:['chrome100','edge100'],minify:true,legalComments:'inline'});
 const serverPath=path.join(root,'.prerender.mjs');
 try{
  await build({...shared,entryPoints:['src/app.tsx'],outfile:serverPath,platform:'node',format:'esm',packages:'external'});

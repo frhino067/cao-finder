@@ -1,0 +1,4 @@
+project_id = "cao-finder"
+
+[functions.delete-cao-account]
+verify_jwt = true

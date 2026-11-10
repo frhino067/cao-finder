@@ -7,13 +7,14 @@
     "test": "node tests/search.test.mjs && node tests/data-build.test.mjs"
   },
   "dependencies": {
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
     "@base-ui/react": "^1.7.0",
+    "@supabase/supabase-js": "2.98.0",
     "class-variance-authority": "0.7.1",
     "clsx": "2.1.1",
     "lucide-react": "^1.31.0",
     "radix-ui": "^1.6.7",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
     "tailwind-merge": "3.6.0"
   },
   "devDependencies": {
