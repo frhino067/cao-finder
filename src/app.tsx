@@ -12,6 +12,6 @@ export default function App(){
   return()=>window.removeEventListener('hashchange',changed);
  },[]);
  const page=route.slice(2).split('?')[0];
- const view=['colleges','categories','calculator','saved','account'].includes(page)?page:'courses';
+ const view=['colleges','categories','calculator','saved','account','study'].includes(page)?page:'courses';
  return <Finder key={route} view={view} shortlist={shortlist}/>;
 }

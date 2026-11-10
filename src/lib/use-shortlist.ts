@@ -176,7 +176,7 @@ export function useShortlist() {
   const importable = accountCodes ? guest.filter(code => !accountCodes.includes(code)) : [];
 
   return {
-    client, user, authError, saved, loading, busy, error, setError, loadSaved, toggleSaved,
+    client, user, authReady, authError, saved, loading, busy, error, setError, loadSaved, toggleSaved,
     canSave: !loading && !busy && (!userId || !!accountCodes),
     importable,
     importGuest: () => changeCloud(importable, false),

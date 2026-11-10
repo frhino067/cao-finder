@@ -71,7 +71,7 @@ export default function Account({shortlist}: {shortlist: Shortlist}) {
       await client.auth.signOut({scope: 'local'});
       setConfirmDelete(false);
       setEmail('');
-      setFeedback('Your account and online shortlist were deleted.');
+      setFeedback('Your account, online shortlist, and study log were deleted.');
     }, 'Could not delete your account. Please try again.');
   }
 
@@ -84,9 +84,10 @@ export default function Account({shortlist}: {shortlist: Shortlist}) {
         : loading && !user ? <p role="status">Checking your session…</p>
         : user ? <>
           <h2>Your account</h2>
-          <p>Signed in as <strong>{user.email}</strong>. Courses you save while signed in sync across devices.</p>
+          <p>Signed in as <strong>{user.email}</strong>. Your saved courses and study log sync across devices.</p>
           <div className="account-actions">
             <a className="primary-button" href="#/saved">View saved courses<ArrowRight size={16}/></a>
+            <a className="outline-button" href="#/study">Open study tracker<ArrowRight size={16}/></a>
             <button className="outline-button" disabled={disabled} onClick={signOut}>Sign out</button>
           </div>
           {importable.length > 0 && <div className="account-section">
@@ -101,7 +102,7 @@ export default function Account({shortlist}: {shortlist: Shortlist}) {
           </div>}
           <div className="account-section">
             <h3>Delete account</h3>
-            <p>Deleting your account permanently removes your account and its online shortlist.</p>
+            <p>Deleting your account permanently removes your online shortlist and study sessions.</p>
             {confirmDelete ? <div className="account-actions">
               <button className="outline-button account-delete" disabled={disabled} onClick={deleteAccount}>Permanently delete account</button>
               <button className="text-button" disabled={disabled} onClick={() => setConfirmDelete(false)}>Cancel</button>
