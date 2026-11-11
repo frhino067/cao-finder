@@ -1,8 +1,8 @@
 import {useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent} from 'react';
 import type {SupabaseClient} from '@supabase/supabase-js';
 import {
-  ArrowRight, BarChart3, BookOpen, CalendarDays, Check, ChevronLeft,
-  ChevronRight, LockKeyhole, Pencil, Plus, Target, Trash2,
+  Activity, ArrowRight, BarChart3, BookOpen, CalendarDays, Check, ChevronLeft,
+  ChevronRight, Clock3, LockKeyhole, Pencil, Plus, Target, Trash2,
 } from 'lucide-react';
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog';
 import {
@@ -23,15 +23,27 @@ const subjectColours = ['#6853dc', '#1d9e89', '#d97935', '#5985e0', '#cc5d88', '
 export default function StudyTracker({account}: {account: AccountState}) {
   const {client, user, authReady, authError} = account;
   return <div className="study-page">
-    <div className="content-width study-title"><h1>Study Tracker</h1></div>
+    <section className="content-width study-hero">
+      <div>
+        <p className="study-eyebrow"><BookOpen size={17} aria-hidden="true"/> YOUR LEAVING CERT WORKSPACE</p>
+        <h1>Study tracker</h1>
+        <p>Log your study sessions, see where your time went, and keep track of what to revisit.</p>
+      </div>
+      <span className="study-hero-badge"><LockKeyhole size={16} aria-hidden="true"/> Private to your account</span>
+    </section>
     {!authReady ? <div className="content-width study-panel study-access" role="status">Checking your account…</div>
       : user && client ? <StudyWorkspace key={user.id} client={client} userId={user.id}/>
       : <section className="content-width study-panel study-access">
         <span className="study-feature-icon"><LockKeyhole size={23} aria-hidden="true"/></span>
-        <h2>Sign in to track your study</h2>
-        <p>Your study log is private and syncs across devices.</p>
+        <h2>Keep your study log in one place</h2>
+        <p>Sign in to save sessions and see your progress on any device.</p>
         {authError && <p className="study-error" role="alert">{authError}</p>}
         <a className="primary-button" href="#/account">Sign in to CAO Finder<ArrowRight size={17}/></a>
+        <div className="study-access-features">
+          <span><Clock3 size={18} aria-hidden="true"/> Log time by subject</span>
+          <span><BarChart3 size={18} aria-hidden="true"/> See your week at a glance</span>
+          <span><Target size={18} aria-hidden="true"/> Find topics worth revisiting</span>
+        </div>
       </section>}
   </div>;
 }
@@ -185,15 +197,16 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
   const maxMinutes = Math.max(1, ...summary.days.map(day => day.minutes));
   const noData = loading || (loadError && data === null);
   const metrics = [
-    {label: 'Study time', value: studyTime(summary.total)},
-    {label: 'Sessions', value: entries.length},
-    {label: 'Active days', value: summary.activeDays + ' / 7'},
-    {label: 'Average difficulty', value: summary.averageDifficulty === null ? '—' : summary.averageDifficulty.toFixed(1) + ' / 5'},
+    {label: 'Study time', value: studyTime(summary.total), note: 'Across all subjects', icon: Clock3},
+    {label: 'Sessions', value: entries.length, note: 'Logged this week', icon: BookOpen},
+    {label: 'Active days', value: summary.activeDays + ' / 7', note: 'Days with study logged', icon: CalendarDays},
+    {label: 'Average difficulty', value: summary.averageDifficulty === null ? '—' : summary.averageDifficulty.toFixed(1) + ' / 5', note: 'Based on your ratings', icon: Activity},
   ];
 
   return <section className="content-width study-workspace" aria-label="Your study workspace">
     <div className="study-week">
       <div>
+        <p className="study-kicker">WEEKLY OVERVIEW</p>
         <h2>{weekLabel(week)}</h2>
       </div>
       <div className="study-week-actions" aria-label="Choose a week">
@@ -207,8 +220,9 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
     </div>
 
     <div className="study-metrics" aria-label="Study totals">
-      {metrics.map(({label, value}) => <div className="study-panel study-metric" key={label}>
-        <p>{label}</p><strong>{noData ? '—' : value}</strong>
+      {metrics.map(({label, value, note, icon: Icon}) => <div className="study-panel study-metric" key={label}>
+        <span className="study-metric-icon"><Icon size={20} aria-hidden="true"/></span>
+        <p>{label}</p><strong>{noData ? '—' : value}</strong><small>{note}</small>
       </div>)}
     </div>
     {loadError && <div className="study-load-error" role="alert">{loadError} <button type="button" className="text-button"
@@ -218,7 +232,7 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
       <form className="study-panel study-form" onSubmit={saveEntry}>
         <div className="study-section-title">
           <span className="study-feature-icon"><Pencil size={19} aria-hidden="true"/></span>
-          <div><h2>{editing ? 'Edit session' : 'Log a session'}</h2></div>
+          <div><h2>{editing ? 'Edit session' : 'Log a session'}</h2><p>Add what you studied and how it went.</p></div>
         </div>
         <fieldset className="study-form-fields" disabled={pending}>
           <label>Subject
@@ -271,7 +285,7 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
         <section className="study-panel study-chart">
           <div className="study-section-title">
             <span className="study-feature-icon"><BarChart3 size={21} aria-hidden="true"/></span>
-            <div><h2>Daily study time</h2></div>
+            <div><h2>Daily study time</h2><p>Minutes logged each day this week.</p></div>
           </div>
           {loading ? <p className="study-empty" role="status">Loading study sessions…</p>
             : noData ? <p className="study-empty">Study time is unavailable.</p>
@@ -289,7 +303,7 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
         <section className="study-panel study-subjects">
           <div className="study-section-title">
             <span className="study-feature-icon study-icon-green"><BookOpen size={19} aria-hidden="true"/></span>
-            <div><h2>Time by subject</h2></div>
+            <div><h2>Time by subject</h2><p>How your weekly study time is split.</p></div>
           </div>
           {summary.bySubject.length ? <ul className="study-breakdown">
             {summary.bySubject.map((subject, index) => <li key={subject.key}>
@@ -338,14 +352,14 @@ function StudyWorkspace({client, userId}: {client: SupabaseClient; userId: strin
       <section className="study-panel study-review">
         <div className="study-section-title">
           <span className="study-feature-icon study-icon-warm"><Target size={20} aria-hidden="true"/></span>
-          <div><h2>Difficult sessions</h2><p>Sessions you rated 4 or 5 this week.</p></div>
+          <div><h2>Worth revisiting</h2><p>Sessions you rated 4 or 5 this week.</p></div>
         </div>
         {summary.review.length ? <ul>
           {summary.review.map(entry => <li key={entry.id}>
             <div><strong>{entry.subject}</strong>{entry.topic && <p>{entry.topic}</p>}</div>
             <span className={`study-difficulty-tag study-level-${entry.difficulty}`}>{entry.difficulty}/5</span>
           </li>)}
-        </ul> : <p className="study-empty">{noData ? 'Review topics are unavailable.' : 'No sessions rated 4 or 5 this week.'}</p>}
+        </ul> : <p className="study-empty">{noData ? 'Review topics are unavailable.' : 'Hard sessions will show up here as ideas for what to study next.'}</p>}
       </section>
     </div>
     <Dialog open={!!deleting} onOpenChange={open => {if (!open && !pending) setDeleting(null);}}>

@@ -18,16 +18,17 @@ await build({...shared,entryPoints:['src/lib/account-client.ts'],outfile:'accoun
 const serverPath=path.join(root,'.prerender.mjs');
 try{
  await build({...shared,entryPoints:['src/app.tsx'],outfile:serverPath,platform:'node',format:'esm',packages:'external'});
- const {default:App,SiteHeader}=await import(pathToFileURL(serverPath).href+'?t='+Date.now());
+ const {default:App,SiteMenu}=await import(pathToFileURL(serverPath).href+'?t='+Date.now());
  const html=renderToString(React.createElement(App));
  const template=await readFile(path.join(root,'index.template.html'),'utf8');
  await writeFile(path.join(root,'index.html'),template.replace('<div id="root"></div>',`<div id="root">${html}</div>`));
  for(const page of staticPages){
   const file=path.join(root,page);
   const source=await readFile(file,'utf8');
-  const header=renderToStaticMarkup(React.createElement(SiteHeader,{standalone:true,page:page==='blog.html'?'blog':undefined}));
-  if(!source.includes('<header class="cao-header">')) throw new Error('Missing site header in '+page);
-  const updated=source.replace(/<header class="cao-header">[\s\S]*?<\/header>/,header);
+  const menu=renderToStaticMarkup(React.createElement(SiteMenu,{standalone:true,page:page==='blog.html'?'blog':undefined}));
+  const slot=/<!-- site menu -->[\s\S]*?<!-- \/site menu -->/;
+  if(!slot.test(source)) throw new Error('Missing site menu in '+page);
+  const updated=source.replace(slot, `<!-- site menu -->${menu}<!-- /site menu -->`);
   if(updated!==source) await writeFile(file,updated);
  }
  console.log(`Built course finder and pre-rendered homepage (${Buffer.byteLength(html)} bytes).`);
