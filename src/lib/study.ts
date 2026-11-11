@@ -7,6 +7,9 @@ export type StudyEntry = {
   topic: string;
 };
 
+export type StudyPeriod = 'week' | 'month';
+type StudyDay = {date: string; label: string; minutes: number};
+
 export const difficultyLabels = ['Easy', 'Manageable', 'Challenging', 'Hard', 'Very hard'] as const;
 
 export const studySubjects = [
@@ -51,6 +54,39 @@ export function weekLabel(start: string) {
   return left + ' – ' + dateLabel(end, {day: 'numeric', month: 'short', year: 'numeric'});
 }
 
+export function shiftStudyPeriod(start: string, period: StudyPeriod, count: number) {
+  if (period === 'week') return addDays(start, count * 7);
+  const month = calendarDate(start.slice(0, 7) + '-01');
+  month.setUTCMonth(month.getUTCMonth() + count);
+  return month.toISOString().slice(0, 10);
+}
+
+export function studyPeriod(date: string, period: StudyPeriod) {
+  const start = period === 'week' ? mondayOf(date) : date.slice(0, 7) + '-01';
+  const end = shiftStudyPeriod(start, period, 1);
+  const days = (calendarDate(end).getTime() - calendarDate(start).getTime()) / 86400000;
+  const label = period === 'week' ? weekLabel(start) : dateLabel(start, {month: 'long', year: 'numeric'});
+  return {start, end, days, label};
+}
+
+export function studyWeeks(days: StudyDay[]) {
+  const weeks: {date: string; end: string; minutes: number}[] = [];
+  for (const day of days) {
+    const last = weeks.at(-1);
+    if (!last || mondayOf(day.date) === day.date) {
+      weeks.push({date: day.date, end: day.date, minutes: day.minutes});
+    } else {
+      last.end = day.date;
+      last.minutes += day.minutes;
+    }
+  }
+  return weeks.map(week => {
+    const first = Number(week.date.slice(-2));
+    const last = Number(week.end.slice(-2));
+    return {...week, label: first === last ? String(first) : `${first}–${last}`};
+  });
+}
+
 export function studyTime(minutes: number) {
   const hours = Math.floor(minutes / 60);
   const rest = minutes % 60;
@@ -58,7 +94,7 @@ export function studyTime(minutes: number) {
   return hours + 'h' + (rest ? ' ' + rest + 'm' : '');
 }
 
-export function studySummary(entries: StudyEntry[], start: string) {
+export function studySummary(entries: StudyEntry[], start: string, dayCount = 7) {
   const minutesByDay = new Map<string, number>();
   const subjects = new Map<string, {key: string; label: string; minutes: number; count: number}>();
   let total = 0;
@@ -74,7 +110,7 @@ export function studySummary(entries: StudyEntry[], start: string) {
     subjects.set(key, subject);
   }
 
-  const days = Array.from({length: 7}, (_, index) => {
+  const days = Array.from({length: dayCount}, (_, index) => {
     const date = addDays(start, index);
     return {date, label: dateLabel(date, {weekday: 'short'}), minutes: minutesByDay.get(date) ?? 0};
   });

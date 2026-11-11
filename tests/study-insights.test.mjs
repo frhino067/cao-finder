@@ -2,11 +2,12 @@ import assert from 'node:assert/strict';
 import {build} from 'esbuild';
 
 const {outputFiles} = await build({
-  stdin: {contents: "export {studyInsights} from './src/lib/study-insights'; export {routeView} from './src/lib/routes';",
+  stdin: {contents: "export {studyInsights} from './src/lib/study-insights'; export {routeView} from './src/lib/routes'; export {studyPeriod, studySummary, studyWeeks, shiftStudyPeriod} from './src/lib/study';",
     resolveDir: process.cwd()},
   bundle: true, platform: 'node', format: 'esm', write: false,
 });
-const {studyInsights, routeView} = await import('data:text/javascript;base64,' + Buffer.from(outputFiles[0].text).toString('base64'));
+const {studyInsights, routeView, studyPeriod, studySummary, studyWeeks, shiftStudyPeriod} = await import(
+  'data:text/javascript;base64,' + Buffer.from(outputFiles[0].text).toString('base64'));
 const entry = (subject, topic, difficulty, studied_on = '2026-11-09') => ({subject, topic, difficulty, studied_on});
 const repeat = (subject, topic, difficulty) => [
   entry(subject, topic, difficulty), entry(subject, topic, difficulty, '2026-11-10'), entry(subject, topic, difficulty),
@@ -46,4 +47,22 @@ for (const route of ['#/?q=business', '#/?college=DN', '#/?points=450', '#/cours
   assert.equal(routeView(route), 'courses', 'Existing filtered course links must continue to open the finder');
 }
 assert.equal(routeView('#/unknown'), 'home');
-console.log('Study difficulty insights and homepage route checks passed.');
+assert.equal(routeView('#/study/log'), 'study');
+assert.equal(routeView('#/study/log?edit=example'), 'study');
+
+const leapMonth = studyPeriod('2024-02-29', 'month');
+assert.equal(leapMonth.start, '2024-02-01');
+assert.equal(leapMonth.end, '2024-03-01');
+assert.equal(leapMonth.days, 29);
+assert.equal(studyPeriod('2025-02-12', 'month').days, 28);
+assert.equal(shiftStudyPeriod('2025-12-01', 'month', 1), '2026-01-01');
+assert.equal(studyPeriod('2026-01-01', 'week').start, '2025-12-29');
+const leapDays = studySummary([
+  {...entry('Maths', 'Algebra', 2, '2024-02-01'), duration_minutes: 45},
+  {...entry('English', 'Poetry', 4, '2024-02-29'), duration_minutes: 75},
+], leapMonth.start, leapMonth.days);
+assert.deepEqual(studyWeeks(leapDays.days).map(({label, minutes}) => [label, minutes]),
+  [['1–4', 45], ['5–11', 0], ['12–18', 0], ['19–25', 0], ['26–29', 75]]);
+assert.equal(leapDays.total, 120);
+assert.equal(leapDays.activeDays, 2);
+console.log('Study insights, calendar periods and route checks passed.');

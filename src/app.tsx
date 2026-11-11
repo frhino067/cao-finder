@@ -14,5 +14,5 @@ export default function App(){
   return()=>window.removeEventListener('hashchange',changed);
  },[]);
  const view=routeView(route);
- return <Finder key={route} view={view} shortlist={shortlist}/>;
+ return <Finder key={view==='study'?'study':route} view={view} route={route} shortlist={shortlist}/>;
 }

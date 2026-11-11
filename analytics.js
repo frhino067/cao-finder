@@ -8,7 +8,7 @@
   function gtag() { (window.dataLayer = window.dataLayer || []).push(arguments); }
   function pagePath() {
     const route = location.hash.split('?')[0];
-    return location.pathname + (['#/', '#/courses', '#/colleges', '#/categories', '#/calculator', '#/saved', '#/study', '#/account'].includes(route) ? route : '');
+    return location.pathname + (['#/', '#/courses', '#/colleges', '#/categories', '#/calculator', '#/saved', '#/study', '#/study/log', '#/account'].includes(route) ? route : '');
   }
   function pageView() {
     if (consent !== 'accepted' || !loaded) return;
