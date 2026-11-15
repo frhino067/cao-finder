@@ -1,7 +1,7 @@
 import {useEffect, useMemo, useRef, useState, type CSSProperties, type FormEvent, type ReactNode} from 'react';
 import type {SupabaseClient} from '@supabase/supabase-js';
 import {
-  Activity, ArrowLeft, ArrowRight, BarChart3, BookOpen, CalendarDays, Check, ChevronLeft,
+  ArrowLeft, ArrowRight, BarChart3, BookOpen, CalendarDays, Check, ChevronLeft,
   ChevronRight, Clock3, LockKeyhole, Pencil, Plus, Target, Trash2,
 } from 'lucide-react';
 import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from '@/components/ui/dialog';
@@ -179,7 +179,6 @@ function StudyWorkspace({client, userId, route}: {client: SupabaseClient; userId
     {label: 'Study time', value: studyTime(summary.total), note: 'Across all subjects', icon: Clock3},
     {label: 'Sessions', value: entries.length, note: `Logged this ${period}`, icon: BookOpen},
     {label: 'Active days', value: summary.activeDays + ' / ' + days, note: 'Days with study logged', icon: CalendarDays},
-    {label: 'Average difficulty', value: summary.averageDifficulty === null ? '—' : summary.averageDifficulty.toFixed(1) + ' / 5', note: 'Based on your ratings', icon: Activity},
   ];
 
   return <>

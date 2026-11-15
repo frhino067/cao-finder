@@ -130,7 +130,7 @@
 .study-week-today { padding: 0 11px; font-weight: 700; white-space: nowrap; }
 .study-icon-button:hover:not(:disabled), .study-week-today:hover:not(:disabled) { background: #f1ecfe; border-color: #dcd0f7; }
 .study-icon-button:disabled, .study-week-today:disabled { color: #746e88; background: #f5f3f9; cursor: default; }
-.study-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 12px; margin-bottom: 16px; }
+.study-metrics { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 12px; margin-bottom: 16px; }
 .study-metric { padding: clamp(13px, 2vw, 20px); }
 .study-metric-icon, .study-feature-icon {
   display: grid;
@@ -144,7 +144,7 @@
 }
 .study-metric:nth-child(2) .study-metric-icon, .study-icon-green { background: #e5f8f2; color: #177867; }
 .study-metric:nth-child(3) .study-metric-icon { background: #eaf1ff; color: #375dae; }
-.study-metric:nth-child(4) .study-metric-icon, .study-icon-warm { background: #fff0e4; color: #a45b26; }
+.study-icon-warm { background: #fff0e4; color: #a45b26; }
 .study-metric p { margin: 10px 0 2px; font-size: 13px; font-weight: 700; }
 .study-metric > strong { display: block; font-size: clamp(21px, 3.5vw, 32px); line-height: 1.15; letter-spacing: -.05em; }
 .study-metric > small { display: block; margin-top: 6px; color: var(--study-muted); font-size: 11px; }
@@ -279,7 +279,9 @@
   .study-hero-actions { width: 100%; justify-content: space-between; gap: 10px 14px; }
   .study-workspace { margin-top: 20px; }
   .study-form input:not([type="radio"]), .study-form textarea { font-size: 16px; }
-  .study-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 9px; }
+  .study-metrics { gap: 8px; }
+  .study-metric { padding: 12px 9px; }
+  .study-metric > small { display: none; }
   .study-analysis { grid-template-columns: minmax(0,1fr); }
 }
 @media (max-width: 420px) {
@@ -453,3 +455,12 @@ header.has-site-menu { position: sticky; top: 0; z-index: 45; background: white;
 @media (max-width: 780px) {
   .has-site-menu > nav, .has-site-menu > .nav-cta, .has-site-menu > .top-cta { display: none; }
 }
+
+.account-password-field { position: relative; }
+.account-password-field input { padding-right: 118px; }
+.account-password-field button { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; }
+.account-panel .account-field-hint { margin: 0; font-size: 13px; color: #615c76; }
+.insight-trend { display: inline-block; margin-top: 5px; color: #615c76; font-size: 11px; font-weight: 650; }
+.insight-trend[data-direction="easier"] { color: #147452; }
+.insight-trend[data-direction="harder"] { color: #9b3e21; }
+.insight-building > .insight-rankings li { display: flex; }

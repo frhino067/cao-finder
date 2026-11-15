@@ -13,7 +13,7 @@ const repeat = (subject, topic, difficulty) => [
   entry(subject, topic, difficulty), entry(subject, topic, difficulty, '2026-11-10'), entry(subject, topic, difficulty),
 ];
 
-assert.deepEqual(studyInsights([]), {total: 0, subjects: [], topics: [], building: []});
+assert.deepEqual(studyInsights([]), {total: 0, subjects: [], topics: [], earlyTopics: [], building: []});
 assert.equal(studyInsights([entry('Maths', 'Algebra', 5)]).subjects.length, 0);
 assert.equal(studyInsights(Array.from({length: 5}, () => entry('Maths', 'Algebra', 5))).subjects.length, 0);
 const data = [
@@ -32,6 +32,7 @@ assert.equal(result.subjects[0].average, 4.25);
 assert.equal(result.subjects[0].count, 4);
 assert.equal(result.subjects[0].days, 3);
 assert.equal(result.building[0].label, 'Physics', 'One difficult session must not top the ranking');
+assert.equal(result.earlyTopics[0].label, 'Mechanics', 'A hard first session is visible before ranking');
 assert.equal(result.topics[0].label, 'Complex numbers');
 assert.equal(result.topics[0].subject, 'Mathematics');
 assert.equal(result.topics.filter(group => group.label === 'Complex numbers').length, 2, 'Topics stay within their subject');
@@ -39,6 +40,18 @@ assert.ok(result.topics.every(group => group.label.trim()), 'Optional blank topi
 assert.equal(studyInsights(data.filter(row => row.subject !== 'Mathematics')).topics.some(group => group.subject === 'Mathematics'), false,
   'Edits and deletions must remove ineligible groups from the ranking');
 assert.equal(studyInsights([...repeat('Biology', 'Cells', 5), ...repeat('Latin', 'Grammar', 5)]).subjects[0].label, 'Biology');
+const topicProgress = studyInsights([
+  ...repeat('Maths', 'Functions', 4),
+  entry('Maths', 'Geometry', 5, '2026-11-01'),
+  entry('Maths', 'Geometry', 5, '2026-11-02'),
+  entry('Maths', 'Geometry', 3, '2026-11-03'),
+  entry('Maths', 'Geometry', 3, '2026-11-04'),
+  entry('Maths', 'Geometry', 3, '2026-11-04'),
+]);
+assert.deepEqual(topicProgress.topics.map(({label}) => label), ['Functions', 'Geometry']);
+assert.equal(topicProgress.topics[0].change, null, 'A trend requires four distinct study days');
+assert.equal(topicProgress.topics[1].change, -2);
+assert.equal(topicProgress.topics[1].lastStudied, '2026-11-04');
 
 for (const route of ['#/', '#/courses', '#/calculator', '#/study', '#/account', '#/colleges', '#/categories', '#/saved']) {
   assert.equal(routeView(route), route === '#/' ? 'home' : route.slice(2));
