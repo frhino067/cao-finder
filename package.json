@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node tests/search.test.mjs && node tests/data-build.test.mjs && node tests/study-insights.test.mjs"
+    "test": "node tests/search.test.mjs && node tests/data-build.test.mjs && node tests/study-insights.test.mjs && node tests/points-calculator.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

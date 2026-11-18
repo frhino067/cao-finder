@@ -7,12 +7,12 @@ export const colleges = collegeRows;
 export const collegeMap = Object.fromEntries(colleges.map(c=>[c.id,c]));
 export const categories = ['Business','Economics','Finance','Law','Engineering','Computing','Medicine','Healthcare','Science','Psychology','Education','Arts','Humanities','Languages','Social Sciences','Architecture','Construction','Sports','Media','Journalism','Design','Agriculture'];
 export const locations = ['Dublin','Cork','Galway','Limerick','Maynooth','Waterford','Kilkenny','Sligo','Athlone','Letterkenny','Other locations'];
-export type Filters = { query:string; points:number[]; colleges:string[]; locations:string[]; categories:string[]; lengths:string[]; levels:string[]; types:string[]; subjects:string[] };
+export type Filters = { query:string; points:number[]; colleges:string[]; locations:string[]; categories:string[]; lengths:string[]; levels:string[]; types:string[]; subjects:string[]; pointsOnly?:boolean };
 export const defaults:Filters = {query:'',points:[0,625],colleges:[],locations:[],categories:[],lengths:[],levels:['8'],types:[],subjects:[]};
 export function matches(c:Course,f:Filters,search:SearchQuery=parseCourseSearch(f.query)){
  const col=collegeMap[c.college];
  if(searchScore(c,search)<0)return false;
- if(f.points[0]>0||f.points[1]<625){if(c.points===null||c.special||c.points<f.points[0]||c.points>f.points[1])return false;}
+ if(f.pointsOnly||f.points[0]>0||f.points[1]<625){if(c.points===null||c.special||c.points<f.points[0]||c.points>f.points[1])return false;}
  if(f.colleges.length&&!f.colleges.includes(c.college))return false;
  if(f.locations.length&&!f.locations.some(l=>l==='Other locations'?!!c.location&&!locations.slice(0,-1).includes(c.location):l===c.location))return false;
  if(f.categories.length&&!f.categories.some(k=>c.categories.includes(k)))return false;
@@ -22,5 +22,17 @@ export function matches(c:Course,f:Filters,search:SearchQuery=parseCourseSearch(
  if(f.subjects.length&&(!c.requirements||!f.subjects.every(s=>c.requirements!.subjects.includes(s))))return false;
  return true;
 }
-export const gradePoints:Record<string,number>={H1:100,H2:88,H3:77,H4:66,H5:56,H6:46,H7:37,H8:0,O1:56,O2:46,O3:37,O4:28,O5:20,O6:12,O7:0,O8:0};
-export function calculate(grades:{subject:string;grade:string}[]){return grades.map((g,i)=>({index:i,points:(gradePoints[g.grade]??0)+(g.subject==='Mathematics'&&/^H[1-6]$/.test(g.grade)?25:0)})).sort((a,b)=>b.points-a.points).slice(0,6);}
+
+export function filtersFromParams(p: URLSearchParams, view = 'courses'): Filters {
+ const fromCalculator = p.get('from') === 'calculator';
+ const numeric = (key: string, fallback: number) => {
+  const raw = p.get(key); const n = Number(raw);
+  return raw === null || !raw.trim() || !Number.isFinite(n) ? fallback : Math.max(0, Math.min(625, Math.round(n)));
+ };
+ const max = numeric('points', 625);
+ return {...defaults, query:p.get('q')??'',
+  colleges:p.has('college')&&collegeMap[p.get('college')!]?[p.get('college')!]:[],
+  categories:p.has('category')&&categories.includes(p.get('category')!)?[p.get('category')!]:[],
+  points:[Math.min(max,numeric('min',0)),max], pointsOnly:fromCalculator,
+  levels:view==='saved'||fromCalculator?[]:['8']};
+}
