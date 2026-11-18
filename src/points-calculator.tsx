@@ -90,7 +90,6 @@ export default function PointsCalculator() {
         {enough && <div className="points-course-action">
           <div className="points-range" aria-label="Course points range"><button aria-pressed={!nearby} onClick={() => setNearby(false)}>Up to {total}</button><button aria-pressed={nearby} onClick={() => setNearby(true)}>{Math.max(0, total - 50)}–{total}</button></div>
           <a className="points-find-courses" href={coursePointsLink(total, nearby)} onClick={() => (window as any).caoTrack?.('calculator_courses')}><GraduationCap size={19}/>See {matchingCourses.toLocaleString()} courses</a>
-          <p>2026 points in this range · All course levels</p>
         </div>}
       </aside>
       <section className="points-entry" id="points-entry" aria-labelledby="points-entry-title">
@@ -101,7 +100,7 @@ export default function PointsCalculator() {
             const score = pointsFor({kind: maths ? 'maths' : activeLevel === 'LCVP' ? 'lcvp' : 'subject', grade});
             return <button key={grade} className={'points-grade-button' + (current?.grade === grade ? ' is-current' : '')} aria-label={`${current ? 'Set' : 'Add'} ${maths ? 'Maths ' : activeLevel === 'LCVP' ? 'LCVP ' : ''}${grade}, ${score.points} points${score.bonus ? ', including 25 bonus' : ''}`} onClick={() => chooseGrade(grade)}><strong>{grade}</strong>{activeLevel !== 'LCVP' && <span>{gradeRanges[index]}</span>}<small>{score.points} pts</small>{score.bonus > 0 && <em>+25 included</em>}</button>;
           })}</div>
-          <p className="points-helper">{maths ? (activeLevel === 'H' ? 'These scores include the 25-point bonus at H6 or better.' : 'Ordinary Maths uses the standard points scale.') : activeLevel === 'LCVP' ? 'LCVP can count as one of your best six subjects.' : 'Tap once for each subject. The same grade can be added again.'}</p>
+          {(maths || activeLevel === 'LCVP') && <p className="points-helper">{maths ? (activeLevel === 'H' ? 'These scores include the 25-point bonus at H6 or better.' : 'Ordinary Maths uses the standard points scale.') : 'LCVP can count as one of your best six subjects.'}</p>}
           {step === 'maths' && !current && <button className="points-text-button" onClick={() => setDraft(old => ({...old, step: 'grades'}))}>Skip maths</button>}
         </>}
       </section>
